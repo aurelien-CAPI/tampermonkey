@@ -10,8 +10,8 @@
 // @grant        GM.setValue
 // @grant        GM.deleteValue
 // @grant        GM.listValues
-// @updateURL   https://openuserjs.org/meta/mscarchilli/Amazon_Smile_Redirect.meta.js
-// @downloadURL https://openuserjs.org/install/mscarchilli/Amazon_Smile_Redirect.user.js
+// @updateURL    https://github.com/aurelien-CAPI/tampermonkey/blob/main/%5BJIRA%5D%20Definition%20of%20ready.js
+// @downloadURL  https://github.com/aurelien-CAPI/tampermonkey/blob/main/%5BJIRA%5D%20Definition%20of%20ready.js
 // ==/UserScript==
 
 (function() {
