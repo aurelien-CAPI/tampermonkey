@@ -10,8 +10,8 @@
 // @grant        GM.setValue
 // @grant        GM.deleteValue
 // @grant        GM.listValues
-// @updateURL    https://raw.githubusercontent.com/aurelien-CAPI/tampermonkey/main/%5BJIRA%5D%20Definition%20of%20done.js?token=AROGCASDC5ZDQQFZLF3DDMLBCPVGY
-// @downloadURL  https://raw.githubusercontent.com/aurelien-CAPI/tampermonkey/main/%5BJIRA%5D%20Definition%20of%20done.js?token=AROGCASDC5ZDQQFZLF3DDMLBCPVGY
+// @updateURL    https://raw.githubusercontent.com/aurelien-CAPI/tampermonkey/main/%5BJIRA%5D%20Definition%20of%20done.js
+// @downloadURL  https://raw.githubusercontent.com/aurelien-CAPI/tampermonkey/main/%5BJIRA%5D%20Definition%20of%20done.js
 // ==/UserScript==
 
 (function() {
