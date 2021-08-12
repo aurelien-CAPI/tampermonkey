@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         JIRA DEFINITION OF DONE
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.2
 // @description  Add definition of done to Jira
 // @author       Aurélien CAPI
 // @match        https://jira.adeo.com/browse/ISO-*
