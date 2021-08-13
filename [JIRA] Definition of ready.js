@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         JIRA DEFINITION OF READY
 // @namespace    http://tampermonkey.net/
-// @version      0.2
+// @version      1.0
 // @description  Add definition of ready to Jira
 // @author       Aurélien CAPI
 // @match        https://jira.adeo.com/browse/ISO-*
@@ -20,7 +20,7 @@
     const defaultDOR = [
         {id: 1, checked: true, critere: "Le besoin a été présenté aux parties prenantes métier identifiées et validé"},
         {id: 2, checked: true, critere: "Sa position dans la backlog produit peut évoluer dans le temps"},
-        {id: 3, checked: false, critere: "La story est correctement formulée (« En tant que… je souhaite… afin de… ») et comprise par tous (MOE / MOA)"},
+        {id: 3, checked: false, critere: "La story est correctement formulée (« En tant que… je souhaite… afin de… ») et comprise par tous (MOE / MOA)"},
         {id: 4, checked: false, critere: "Les règles métier / Épique ont été identifiées"},
         {id: 5, checked: false, critere: "Elle possède une valeur métier (business ou technical value)"},
         {id: 6, checked: false, critere: "La story a été abordée par l’équipe lors de la séance de refinement"},
@@ -37,7 +37,8 @@
     const story = document.getElementById('key-val').innerHTML;
     const isUS = document.getElementById('type-val').innerHTML.includes("Récit");
     const statusEligible = defaultStatus.indexOf(document.getElementById('status-val').children[0].innerHTML) != -1;
-    const target = document.getElementById('ppm-task-skill-widget-panel-bigpicture');
+    const target = document.getElementById('viewissuesidebar');
+    target.removeChild(target.children[1]);
 
     var storyDOR;
 
@@ -61,10 +62,10 @@
 
     var showDOR = () => {
         var html = `
-            <div id="peoplemodule" class="module toggle-wrap">
-  <div id="peoplemodule_heading" class="mod-header">
+            <div id="DORmodule" class="module toggle-wrap">
+  <div id="DORmodule_heading" class="mod-header">
     <ul class="ops"></ul>
-	<button class="aui-button toggle-title" aria-label="Definition of ready" aria-controls="peoplemodule" aria-expanded="true" resolved="">
+	<button class="aui-button toggle-title" aria-label="Definition of ready" aria-controls="DORmodule" aria-expanded="true" resolved="">
 	<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"><g fill="none" fill-rule="evenodd">
 	<path d="M3.29175 4.793c-.389.392-.389 1.027 0 1.419l2.939 2.965c.218.215.5.322.779.322s.556-.107.769-.322l2.93-2.955c.388-.392.388-1.027 0-1.419-.389-.392-1.018-.392-1.406 0l-2.298 2.317-2.307-2.327c-.194-.195-.449-.293-.703-.293-.255 0-.51.098-.703.293z" fill="#344563"></path></g></svg>
 	</button>
@@ -85,7 +86,7 @@
  </div>
 </div>
         `
-        target.innerHTML = html;
+        target.innerHTML = html + target.innerHTML;
 
         const checkboxes = document.querySelectorAll(`input[name="updateDOR"]`);
         let values = [];
