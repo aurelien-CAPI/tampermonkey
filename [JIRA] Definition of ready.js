@@ -144,10 +144,7 @@
     }
 
     if (isUS === true && statusEligible === true) {
-        target.style.display = 'block';
         getDOR();
-    } else {
-        target.style.display = 'none';
     }
 
 })();
