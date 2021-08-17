@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         JIRA DEFINITION OF READY
 // @namespace    http://tampermonkey.net/
-// @version      1.1
+// @version      1.2
 // @description  Add definition of ready to Jira
 // @author       Aurélien CAPI
 // @match        https://jira.adeo.com/browse/ISO-*
@@ -57,7 +57,7 @@
     var updateDOR = async (id = null, checked = null) => {
         id === null && checked === null ? null : storyDOR[id].checked = checked;
         await GM.setValue(story, storyDOR);
-        showDOR();
+        id === null && checked === null ? showDOR() : null;
     }
 
     var showDOR = () => {
