@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         JIRA DEFINITION OF DONE
 // @namespace    http://tampermonkey.net/
-// @version      0.2
+// @version      1.0
 // @description  Add definition of done to Jira
 // @author       Aurélien CAPI
 // @match        https://jira.adeo.com/browse/ISO-*
@@ -18,26 +18,25 @@
     'use strict';
 
     const defaultDOD = [
-        {id: 1, checked: false, critere: "Le besoin a été présenté aux parties prenantes métier identifiées et validé"},
-        {id: 2, checked: false, critere: "Sa position dans la backlog produit peut évoluer dans le temps"},
-        {id: 3, checked: false, critere: "La story est correctement formulée (« En tant que… je souhaite… afin de… ») et comprise par tous (MOE / MOA)"},
-        {id: 4, checked: false, critere: "Les règles métier / Épique ont été identifiées"},
-        {id: 5, checked: false, critere: "Elle possède une valeur métier (business ou technical value)"},
-        {id: 6, checked: false, critere: "La story a été abordée par l’équipe lors de la séance de refinement"},
-        {id: 7, checked: false, critere: "Des critères d’acceptance testables et clairs sont définis"},
-        {id: 8, checked: false, critere: "Une maquette / storyboard a été fournie si nécessaire"},
-        {id: 9, checked: false, critere: "Les hypothèses techniques / conditions de réalisation ont été identifiées"},
-        {id: 10, checked: false, critere: "Des tâches d’analyse ont été identifiées et créées si nécessaire"},
-        {id: 11, checked: false, critere: "La story a été affinée par l’équipe (Poker Planning)"},
-        {id: 12, checked: false, critere: "Les liens vers des US, TS ou tâches sont renseignés dans la story et ne bloquent pas la réalisation de celle-ci"},
-        {id: 13, checked: false, critere: "La story est assez petite pour être réalisée dans un sprint et peut-être testée unitairement"}
+        { id : 1, checked: false, critere: "Les développements réalisés répondent au(x) besoin(s) attendu(s)"},
+        { id : 2, checked: false, critere: "Le développement respecte les bonnes pratiques de dev définies par l’équipe"},
+        { id : 3, checked: false, critere: "La PR a été validée par au moins 1 personne (2 personnes si SP >= 5)"},
+        { id : 4, checked: false, critere: "Chaque commit / tags / nom de branche permettent d’identifier le ticket Jira associée"},
+        { id : 5, checked: false, critere: "Les réalisations n’introduisent pas de dette technique ou elle est identifiée (JIRA, TODO, ...)"},
+        { id : 6, checked: false, critere: "Les critères d’acceptance ont été validés par les devs, les retours sont traités ou identifiés dans un Jira"},
+        { id : 7, checked: false, critere: "Les Tests (unitaires / widgets) sont passants et avec une couverture de test maximale"},
+        { id : 8, checked: false, critere: "La story a été mergée sans provoquer de régression"},
+        { id : 9, checked: false, critere: "La feature a été déployée dans un environnement de test (UAT)"},
+        { id : 10, checked: false, critere: "Le JIRA et le Scrumboard sont synchronisés"},
+        { id : 11, checked: false, critere: "La communication sur les fix a été faite aux personnes concernées"},
+        { id : 12, checked: false, critere: "La story a été validée techniquement par l’équipe ou fonctionnellement par le PO"}
     ];
-    const defaultStatus = ['In progress', 'Code to review', 'To test', 'Resolved', 'Closed'];
+    const defaultStatus = ['Ready', 'En cours', 'Blocked', 'Code to review', 'To test', 'In test', 'Fermée'];
 
     const story = document.getElementById('key-val').innerHTML + '-DOD';
-    const isUS = document.getElementById('type-val').innerHTML.includes("Récit");
     const statusEligible = defaultStatus.indexOf(document.getElementById('status-val').children[0].innerHTML) != -1;
-    const target = document.getElementById('ppm-task-skill-widget-panel-bigpicture');
+    const target = document.getElementById('viewissuesidebar');
+    target.removeChild(target.children[1]);
 
     var storyDOD;
 
@@ -45,22 +44,20 @@
         console.log('On va chercher la DOD pour la story ' + story);
         console.log(await GM.getValue(story));
         storyDOD = await GM.getValue(story);
-        storyDOD ? showDOD() : setDOD();
+        storyDOD ? retrieveInformationsForDOD() : setDOD();
     }
 
     var setDOD = async () => {
         console.log('DOD non trouvée, on va la setter pour la story ' + story);
         await GM.setValue(story, defaultDOD);
         storyDOD = defaultDOD;
-        showDOD();
+        retrieveInformationsForDOD();
     }
 
-    var updateDOD = async (id, checked) => {
-        console.log(checked);
-        storyDOD[id].checked = checked;
+    var updateDOD = async (id = null, checked = null) => {
+        id === null && checked === null ? null : storyDOD[id].checked = checked;
         await GM.setValue(story, storyDOD);
-        console.log(await GM.getValue(story));
-        showDOD();
+        id === null && checked === null ? showDOD() : null;
     }
 
     var showDOD = function() {
@@ -89,7 +86,7 @@
  </div>
 </div>
         `
-        target.innerHTML = html;
+        target.innerHTML = html + target.innerHTML;
 
         const checkboxes = document.querySelectorAll(`input[name="updateDOD"]`);
         let values = [];
@@ -107,6 +104,30 @@
         if (ratio < 30) document.getElementById('DOD-badge').style.background = '#ff4c3e';
     }
 
-    isUS === true && statusEligible === true ? getDOD() : target.style.display = 'none';
+    const retrieveInformationsForDOD = () => {
+
+        // On va vérifier si la story a été développée
+        if (defaultStatus.indexOf(document.getElementById('status-val').children[0].innerHTML) >= 3) storyDOD[0].checked = true;
+
+        // On va vérifier si on est passé en PR
+        if (defaultStatus.indexOf(document.getElementById('status-val').children[0].innerHTML) >= 4) storyDOD[1].checked = true;
+
+        // On va vérifier si on est passé en PR
+        if (defaultStatus.indexOf(document.getElementById('status-val').children[0].innerHTML) >= 4) storyDOD[2].checked = true;
+
+        // On va vérifier si on est passé en PR
+        if (defaultStatus.indexOf(document.getElementById('status-val').children[0].innerHTML) >= 4) storyDOD[5].checked = true;
+
+        // On va vérifier si on est passé en PR
+        if (defaultStatus.indexOf(document.getElementById('status-val').children[0].innerHTML) >= 4) storyDOD[7].checked = true;
+
+        // On va vérifier si on est passé en PR
+        if (defaultStatus.indexOf(document.getElementById('status-val').children[0].innerHTML) >= 4) storyDOD[9].checked = true;
+
+
+        updateDOD();
+    }
+
+    if (statusEligible === true) getDOD();
 
 })();
