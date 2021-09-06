@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         JIRA DEFINITION OF READY
 // @namespace    http://tampermonkey.net/
-// @version      1.2
+// @version      1.3
 // @description  Add definition of ready to Jira
 // @author       Aurélien CAPI
 // @match        https://jira.adeo.com/browse/ISO-*
@@ -114,7 +114,7 @@
         const description = document.getElementById('description-val');
 
         // On vérifie si on a un personna
-        description.innerHTML.match(/(so that|so as to|afin de).*.{15,}/gi) ? storyDOR[2].checked = true : storyDOR[2].checked = false;
+        description.innerHTML.match(/(so that|so as to|afin de|in order to).*.{15,}/gi) ? storyDOR[2].checked = true : storyDOR[2].checked = false;
 
         // On vérifie si on a des critères d'acceptance
         description.innerHTML.match(/(Use case|test case|scenario).*.{5,}/gi) ? storyDOR[6].checked = true : storyDOR[6].checked = false;
