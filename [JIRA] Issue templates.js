@@ -7,6 +7,8 @@
 // @icon         https://www.google.com/s2/favicons?domain=adeo.com
 // @version     1.0
 // @grant       none
+// @updateURL    https://raw.githubusercontent.com/aurelien-CAPI/tampermonkey/main/%5BJIRA%5D%20Issue%20templates.js
+// @downloadURL  https://raw.githubusercontent.com/aurelien-CAPI/tampermonkey/main/%5BJIRA%5D%20Issue%20templates.js
 // ==/UserScript==
 
 
